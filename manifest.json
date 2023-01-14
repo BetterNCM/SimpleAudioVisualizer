@@ -1,0 +1,13 @@
+{
+    "manifest_version": 1,
+    "name": "SimpleAudioVisualizer",
+    "version": "0.1.0",
+    "author":"MicroBlock",
+    "injects": {
+        "Main": [
+            {
+                "file": "index.js"
+            }
+        ]
+    }
+}
