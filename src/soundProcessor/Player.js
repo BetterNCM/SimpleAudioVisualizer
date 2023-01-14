@@ -76,11 +76,11 @@ class Player {
 	play() {
 			this.AC.resume();
             this.refreshFrame();
+			console.log(this.audio)
 	}
 
 	pause() {
 		if (this.audio && !this.audio.paused) {
-			this.audio.pause();
 			this.paused = true;
 		}
 	}

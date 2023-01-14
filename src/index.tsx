@@ -32,12 +32,13 @@ plugin.onLoad((selfPlugin) => {
         mainPlayer?.appendChild(canvasParent);
     });
 
+    let player;
     betterncm.utils.waitForElement(".btnp").then((btn) => {
         loadedPlugins.LibFrontendPlay.addEventListener(
             "updateCurrentAudioPlayer",
             (e) => {
-                if (!canvasElement) return;
-                const player = new Player((e as CustomEvent).detail, [
+                if (player) player.paused = true;
+                player = new Player((e as CustomEvent).detail, [
                     new VisualCanvas(canvasElement, 0),
                     new VisualCanvas(undefined, btn),
                 ]);
@@ -50,17 +51,19 @@ plugin.onLoad((selfPlugin) => {
 declare var h: typeof React.createElement;
 declare var f: typeof React.Fragment;
 
-export let CurrentColor={
-    r:255,g:255,b:255,a:30
-}
+export let CurrentColor = {
+    r: 255,
+    g: 255,
+    b: 255,
+    a: 30,
+};
 
 function Menu() {
     const canvasRef = React.useRef(null);
 
-    const btnColorRef=React.useRef<null | HTMLInputElement>(null);
+    const btnColorRef = React.useRef<null | HTMLInputElement>(null);
 
     React.useEffect(() => {
-        console.log(canvasElement);
         canvasElement = canvasRef.current;
     }, [canvasRef]);
 
@@ -94,19 +97,16 @@ function Menu() {
         false,
     );
 
-    const [color, setColor] = useLocalStorage(
-        "simpleaudiovisualizer.color",
-        {
-            r:255,
-            g:255,
-            b:255,
-            a:255
-        },
-    );
+    const [color, setColor] = useLocalStorage("simpleaudiovisualizer.color", {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 255,
+    });
 
-    React.useEffect(()=>{
-        CurrentColor=color;
-    },[color]);
+    React.useEffect(() => {
+        CurrentColor = color;
+    }, [color]);
 
     React.useEffect(() => {
         window.addEventListener("resize", () => {
@@ -140,10 +140,14 @@ function Menu() {
                     <span>固定位置</span>
                 </div>
 
-                <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-                    <span style={{minWidth:"5em"}}>水平平移</span>
+                <Stack
+                    spacing={2}
+                    direction="row"
+                    sx={{ mb: 1 }}
+                    alignItems="center"
+                >
+                    <span style={{ minWidth: "5em" }}>水平平移</span>
                     <Slider
-                        
                         min={-100}
                         max={100}
                         value={transformX}
@@ -151,10 +155,14 @@ function Menu() {
                     />
                 </Stack>
 
-                <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-                    <span style={{minWidth:"5em"}}>垂直平移</span>
+                <Stack
+                    spacing={2}
+                    direction="row"
+                    sx={{ mb: 1 }}
+                    alignItems="center"
+                >
+                    <span style={{ minWidth: "5em" }}>垂直平移</span>
                     <Slider
-                        
                         min={-100}
                         max={100}
                         value={transformY}
@@ -163,7 +171,11 @@ function Menu() {
                 </Stack>
 
                 <div>
-                    <ChromePicker color={color} onChange={(res)=>setColor(res.rgb as any)} disableAlpha={false}/>
+                    <ChromePicker
+                        color={color}
+                        onChange={(res) => setColor(res.rgb as any)}
+                        disableAlpha={false}
+                    />
                 </div>
             </Stack>
             {ReactDOM.createPortal(
@@ -171,17 +183,20 @@ function Menu() {
                     <canvas
                         ref={canvasRef}
                         style={{
-                            transform: `${
-                                horizontal
-                                    ? `rotate(90deg) translateY(${
-                                          transformX - 100
-                                      }%)`
-                                    : `translateY(${transformX}%)`
-                            } 
-                            ${mirrored ? "scaleY(-1)" : ""}
-                            translateX(${transformY}%)
+                            transform: horizontal
+                                ? `
+                            rotate(90deg) translateY(${
+                                mirrored ? -transformX : transformX - 100
+                            }%)  translateX(${transformY}%) ${
+                                      mirrored ? "scaleY(-1)" : ""
+                                  }
+                            `
+                                : `
+                            translateX(${transformX}%)  translateY(${
+                                      mirrored ? 100 - transformY : transformY
+                                  }%) ${mirrored ? "scaleY(-1)" : ""}
                             `,
-                            position:fixed?"fixed":"absolute"
+                            position: fixed ? "fixed" : "absolute",
                         }}
                         className="audioVisualizerCanvas"
                     />
