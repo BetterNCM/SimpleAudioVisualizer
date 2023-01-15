@@ -103,12 +103,14 @@ function Menu() {
     );
 
     React.useEffect(()=>{
-        if(modifyMP){
-            document.querySelector("#main-player")?.classList.add("audioVisualizerModifyMP");
-        }else{
-            document.querySelector("#main-player")?.classList.remove("audioVisualizerModifyMP")
-        }
-    },[modifyMP]);
+        setInterval(()=>{
+            if(modifyMP){
+                document.querySelector("#main-player")?.classList.add("audioVisualizerModifyMP");
+            }else{
+                document.querySelector("#main-player")?.classList.remove("audioVisualizerModifyMP")
+            }
+        },100);
+    },[]);
 
     const [color, setColor] = useLocalStorage("simpleaudiovisualizer.color", {
         r: 255,
