@@ -97,6 +97,19 @@ function Menu() {
         false,
     );
 
+    const [modifyMP, setModifyMP] = useLocalStorage(
+        "simpleaudiovisualizer.modifyMP",
+        false,
+    );
+
+    React.useEffect(()=>{
+        if(modifyMP){
+            document.querySelector("#main-player")?.classList.add("audioVisualizerModifyMP");
+        }else{
+            document.querySelector("#main-player")?.classList.remove("audioVisualizerModifyMP")
+        }
+    },[modifyMP]);
+
     const [color, setColor] = useLocalStorage("simpleaudiovisualizer.color", {
         r: 255,
         g: 255,
@@ -138,6 +151,12 @@ function Menu() {
                         onChange={(_, v) => setFixed(v)}
                     />
                     <span>固定位置</span>
+
+                    <Checkbox
+                        checked={modifyMP}
+                        onChange={(_, v) => setModifyMP(v)}
+                    />
+                    <span>修改播放栏</span>
                 </div>
 
                 <Stack
