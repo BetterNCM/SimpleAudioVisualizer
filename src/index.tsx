@@ -42,6 +42,7 @@ plugin.onLoad((selfPlugin) => {
                     new VisualCanvas(canvasElement, 0),
                     new VisualCanvas(undefined, btn),
                 ]);
+
                 player.play();
             },
         );

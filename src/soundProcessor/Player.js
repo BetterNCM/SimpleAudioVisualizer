@@ -15,7 +15,7 @@ class Player {
 
 
 		// 创建上下文
-		this.AC = new AudioContext();
+		this.AC = loadedPlugins.LibFrontendPlay.currentAudioContext;
 
 
 
@@ -46,7 +46,7 @@ class Player {
 		this.audio = audio;
 
 		// 将audio节点与webaudio实例关联
-		const source = AC.createMediaElementSource(this.audio);
+		const source = loadedPlugins.LibFrontendPlay.currentAudioSource
 
 		// 连接analyserNode
         console.log('audio context',AC);
