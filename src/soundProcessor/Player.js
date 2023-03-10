@@ -45,15 +45,6 @@ class Player {
 		} = this;
 		this.audio = audio;
 
-		// 将audio节点与webaudio实例关联
-		const source = loadedPlugins.LibFrontendPlay.currentAudioSource
-
-		// 连接analyserNode
-        console.log('audio context',AC);
-		console.log('analyser', analyser);
-        
-		source.connect(analyser);
-		analyser.connect(AC.destination);
 
 		// 实例化音频处理器
 		this.soundProcessor = new SoundProcessor({
@@ -74,15 +65,11 @@ class Player {
 	}
 
 	play() {
-			this.AC.resume();
             this.refreshFrame();
-			console.log(this.audio)
 	}
 
 	pause() {
-		if (this.audio && !this.audio.paused) {
-			this.paused = true;
-		}
+
 	}
 
 	refreshFrame() {
@@ -94,16 +81,7 @@ class Player {
 	}
 
 	getFre() {
-		const {
-			analyser,
-			soundProcessor
-		} = this;
-
-		const array = new Uint8Array(analyser.frequencyBinCount);
-		// 将音频节点的数据拷贝到Uin8Array中
-		analyser.getByteFrequencyData(array);
-		// return reduce(array.slice(0, array.length / 2), V_TARGETS);
-		return soundProcessor.process(array);
+		return this.soundProcessor.process(loadedPlugins.LibFrontendPlay.getFFTData());
 	}
 }
 
